@@ -116,7 +116,7 @@ def demo():
 
     for sentence, score in train_data:
         sentence = utils.remove_words(sentence, swedish_stop_words)
-        matrix.set_sentence_value(sentence, score)
+        matrix.add_sentence_value(sentence, score)
         bag.add_words(sentence.split(" "))
 
     # print("word frequencies:")
@@ -126,7 +126,7 @@ def demo():
 
     for sentence in test_data:
         sentence = utils.remove_words(sentence, swedish_stop_words)
-        results.append([sentence, matrix.get_sentence_value(sentence)])
+        results.append([sentence, matrix.get_sentence_avg_value(sentence)])
 
     for sentence, score in sorted(results, key=lambda l: l[1], reverse=True):
         print("%3d: %s" % (score, sentence))

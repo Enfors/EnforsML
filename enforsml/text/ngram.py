@@ -165,8 +165,8 @@ class NGramMatrix(object):
         for n in range(0, max_n + 1):
             self.matrix.append({})
 
-    def set_sentence_value(self, sentence, value):
-        """Give a value to a sentence, and all its ngrams.
+    def add_sentence_value(self, sentence, value):
+        """Add a value to a sentence, and all its ngrams.
         """
 
         for n in range(self.min_n, self.max_n + 1):
@@ -183,8 +183,21 @@ class NGramMatrix(object):
                 ngram_values.append(value)
                 self.matrix[n][dict_key] = ngram_values
 
-    def get_sentence_value(self, sentence):
-        """Get the value for a sentence.
+    def get_sentence_avg_value(self, sentence):
+        """Get the average value for a sentence.
+        """
+
+        all_values = self.get_sentence_values(sentence)
+
+        try:
+            avg = sum(all_values) / len(all_values)
+        except ZeroDivisionError:
+            avg = 0
+
+        return avg
+
+    def get_sentence_values(self, sentence):
+        """Get all the values for a sentence.
         """
 
         all_values = []
@@ -210,12 +223,8 @@ class NGramMatrix(object):
                 except KeyError:
                     pass  # This ngram didn't exist
 
-        try:
-            avg = sum(all_values) / len(all_values)
-        except ZeroDivisionError:
-            avg = 0
 
-        return avg
+        return all_values
 
 
 def make_ngrams(words, n):
