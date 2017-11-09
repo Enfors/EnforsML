@@ -38,11 +38,54 @@ class NGram(object):
     >>> ngram3 = NGram([word1, word2, word3])
     >>> ngram1 == ngram3
     False
+
+    We can check if one ngram is a subset of another:
+
+    >>> word1 = Word("one")
+    >>> word2 = Word("two")
+    >>> word3 = Word("three")
+    >>> word4 = Word("four")
+    >>> ngram1 = NGram([word1, word2, word3])
+    >>> ngram1 in ngram1
+    True
+    >>> ngram2 = NGram([word1, word2])
+    >>> ngram1 in ngram2
+    False
+    >>> ngram2 in ngram1
+    True
+    >>> ngram3 = NGram([word1, word3])
+    >>> ngram3 in ngram1
+    False
+    >>> ngram4 = NGram([word2])
+    >>> ngram4 in ngram1
+    True
+    >>> ngram5 = NGram([word4])
+    >>> ngram5 in ngram1
+    False
+
+    It is also possible to subtract one ngram from another:
+
+    >>> word1 = Word("one")
+    >>> word2 = Word("two")
+    >>> word3 = Word("three")
+    >>> ngram1 = NGram([word1, word2, word3])
+    >>> ngram1
+    NGram([Word('one', word_type=1), Word('two', word_type=1), Word('three', word_type=1)])
+    >>> ngram2 = NGram([word2])
+    >>> ngram1 - ngram2
+    NGram([Word('one', word_type=1), Word('three', word_type=1)])
+    >>> ngram3 = NGram([word1])
+    >>> ngram1 - ngram3
+    NGram([Word('two', word_type=1), Word('three', word_type=1)])
+    >>> ngram1 - ngram1
+    NGram([])
+    >>> ngram1 - NGram([word2, word3])
+    NGram([Word('one', word_type=1)])
     """
 
     def __init__(self, words):
         if not words:
-            words = []
+            self.words = []
         else:
             self.words = words
 
@@ -69,6 +112,45 @@ class NGram(object):
                 return False
 
         return True
+
+    def __sub__(self, other_ngram):
+        new_ngram_words = []
+        
+        index = self.subset_index(other_ngram)
+
+        if index < 0:
+            return []
+
+        new_ngram_words = self.words[0:index]
+        subset_end = index + len(other_ngram)
+        
+        if subset_end < len(self):
+            new_ngram_words.extend(self.words[subset_end:])
+
+        return NGram(new_ngram_words)
+
+
+    def subset_index(self, other_ngram):
+        i,j = 0,0
+        index = -1
+
+        while i < len(self.words) and j < len(other_ngram.words):
+            if self.words[i] == other_ngram.words[j]:
+                if index < 0:
+                    index = i
+                j += 1
+            elif j > 0:
+                return -1
+            i += 1
+
+        if j == len(other_ngram.words):
+            return index
+        else:
+            return -1
+
+
+    def __contains__(self, other_ngram):
+        return self.subset_index(other_ngram) > -1
 
 
 class NGramMatrix(object):
