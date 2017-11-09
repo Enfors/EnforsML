@@ -1,5 +1,6 @@
 from enforsml.text import word
 
+
 def normalize(txt):
     """Return a normalized copy of txt.
     """
@@ -40,9 +41,9 @@ def remove_words(txt, words_to_remove):
 
     output = ""
 
-    for word in txt.split(" "):
-        if word not in words_to_remove:
-            output += word + " "
+    for wrd in txt.split(" "):
+        if wrd not in words_to_remove:
+            output += wrd + " "
 
     return output.strip()
 

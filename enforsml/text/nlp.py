@@ -3,10 +3,12 @@
 
 from enforsml.text import ngram
 
+
 class NLPError(BaseException):
     """Generic NLP error.
     """
     pass
+
 
 class IncorrectArg(NLPError):
     pass
@@ -43,7 +45,7 @@ class Intent(object):
             self.ngram_matrix.add_sentence_value(sentence, 10)
 
     def check(self, sentence):
-        return self.ngram_matrix.get_sentence_values(sentence)
+        return self.ngram_matrix.get_sentence_avg_value(sentence)
 
 
 class ScoredIntent(object):
@@ -61,7 +63,7 @@ class ScoredIntent(object):
 
     def __repr__(self):
         return "ScoredIntent(%s, %d)" % (repr(self.intent), self.score)
-    
+
 
 class Parser(object):
     """Parses text and matches it to Intents.
@@ -84,7 +86,7 @@ class Parser(object):
 
     def __len__(self):
         return len(self.intents)
-    
+
 
 class ParseResult(object):
     """The return value of a Parser's parse() function.
@@ -112,7 +114,8 @@ class ParseResult(object):
         self.sort()
 
     def sort(self):
-        self.scored_intents = sorted(self.scored_intents, key=lambda i: i.score,
+        self.scored_intents = sorted(self.scored_intents,
+                                     key=lambda i: i.score,
                                      reverse=True)
 
     def __str__(self):
@@ -123,4 +126,3 @@ class ParseResult(object):
             output += "\n%3d: %s" % (scored_intent.score, scored_intent.intent)
 
         return output
-                    

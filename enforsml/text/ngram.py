@@ -69,8 +69,6 @@ class NGram(object):
     >>> word2 = Word("two")
     >>> word3 = Word("three")
     >>> ngram1 = NGram([word1, word2, word3])
-    >>> ngram1
-    NGram([Word('one', word_type=1), Word('two', word_type=1), Word('three', word_type=1)])
     >>> ngram2 = NGram([word2])
     >>> ngram1 - ngram2
     NGram([Word('one', word_type=1), Word('three', word_type=1)])
@@ -115,7 +113,7 @@ class NGram(object):
 
     def __sub__(self, other_ngram):
         new_ngram_words = []
-        
+
         index = self.subset_index(other_ngram)
 
         if index < 0:
@@ -123,15 +121,14 @@ class NGram(object):
 
         new_ngram_words = self.words[0:index]
         subset_end = index + len(other_ngram)
-        
+
         if subset_end < len(self):
             new_ngram_words.extend(self.words[subset_end:])
 
         return NGram(new_ngram_words)
 
-
     def subset_index(self, other_ngram):
-        i,j = 0,0
+        i, j = 0, 0
         index = -1
 
         while i < len(self.words) and j < len(other_ngram.words):
@@ -147,7 +144,6 @@ class NGram(object):
             return index
         else:
             return -1
-
 
     def __contains__(self, other_ngram):
         return self.subset_index(other_ngram) > -1
@@ -222,7 +218,6 @@ class NGramMatrix(object):
                     all_values.append(avg * n)
                 except KeyError:
                     pass  # This ngram didn't exist
-
 
         return all_values
 
