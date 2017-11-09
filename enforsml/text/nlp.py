@@ -24,9 +24,10 @@ class Intent(object):
     'start' intent
     """
 
-    def __init__(self, name):
+    def __init__(self, name, response_data=None):
         self.name = name
-        self.ngram_matrix = ngram.NGramMatrix(1, 3)
+        self.response_data = response_data
+        self.ngram_matrix = ngram.NGramMatrix(1, 4)
 
     def __repr__(self):
         return "Intent('%s')" % str(self.name)
@@ -45,7 +46,7 @@ class Intent(object):
             self.ngram_matrix.add_sentence_value(sentence, 10)
 
     def check(self, sentence):
-        return self.ngram_matrix.get_sentence_avg_value(sentence)
+        return self.ngram_matrix.get_sentence_values(sentence)
 
 
 class ScoredIntent(object):
@@ -87,6 +88,20 @@ class Parser(object):
     def __len__(self):
         return len(self.intents)
 
+    def parse(self, txt):
+        """Parse input from a user, and return a ParseResult object.
+        """
+
+        result = ParseResult()
+
+        for intent in self.intents:
+            score = sum(intent.check(txt))
+            if score > 0:
+                result.add(ScoredIntent(intent, score))
+
+        result.sort()
+        return result
+
 
 class ParseResult(object):
     """The return value of a Parser's parse() function.
@@ -109,9 +124,12 @@ class ParseResult(object):
      10: 'Intent 2' intent
     """
 
-    def __init__(self, intent_scores):
-        self.scored_intents = intent_scores
+    def __init__(self, scored_intents=[]):
+        self.scored_intents = scored_intents
         self.sort()
+
+    def add(self, scored_intent):
+        self.scored_intents.append(scored_intent)
 
     def sort(self):
         self.scored_intents = sorted(self.scored_intents,
@@ -126,3 +144,9 @@ class ParseResult(object):
             output += "\n%3d: %s" % (scored_intent.score, scored_intent.intent)
 
         return output
+
+    def __len__(self):
+        return len(self.scored_intents)
+
+    def __getitem__(self, key):
+        return self.scored_intents[key]
