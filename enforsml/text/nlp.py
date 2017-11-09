@@ -43,10 +43,10 @@ class Intent(object):
             raise IncorrectArg("sentences is not alist")
 
         for sentence in sentences:
-            self.ngram_matrix.add_sentence_value(sentence, 10)
+            self.ngram_matrix.add_sentence_value(sentence.lower(), 10)
 
     def check(self, sentence):
-        return self.ngram_matrix.get_sentence_values(sentence)
+        return self.ngram_matrix.get_sentence_values(sentence.lower())
 
 
 class ScoredIntent(object):
