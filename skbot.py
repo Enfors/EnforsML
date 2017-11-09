@@ -4,6 +4,7 @@
 Attempts to answer questions about Shorinji Kempo.
 """
 
+import textwrap
 
 from enforsml.text import nlp
 
@@ -40,6 +41,10 @@ def main():
                      ["Vad skiljer Shorinji Kempo från andra kampsporter",
                       "Vad är det för skillnad mellan Shorinji Kempo och "
                       "andra kampsporter",
+                      "Vad är speciellt med Shorinji Kempo",
+                      "Vad är det som gör Shorinji Kempo unikt",
+                      "Varför ska jag träna just Shorinji Kempo",
+                      "Vad har Shorinji Kempo för kännetecken",
                       "Vad är det för skillnad mellan Shorinji Kempo och "
                       "karate",
                       "Shorinji Kempo brukar kallas \"Den tänkande människans "
@@ -60,7 +65,8 @@ def main():
                       "Hur ont gör det att träna",
                       "Vissa tekniker som tränas i vuxengruppen kan göra lite "
                       "ont, så det är viktigt att vi är försiktiga med "
-                      "varandra."],
+                      "varandra. Dessa tekniker tränas dock inte i "
+                      "juniorgruppen."],
 
                      ["Vad kostar det att vara medlem",
                       "Vad kostar det att bli medlem i klubben",
@@ -84,6 +90,9 @@ def main():
 
                      ["Var ligger träningslokalen",
                       "Var finns dojon",
+                      "Var finns er dojo",
+                      "Var ligger er dojo",
+                      "Var finns er träningslokal",
                       "Var håller ni till",
                       "Var tränar ni",
                       "Var ligger klubbens träningslokal",
@@ -101,12 +110,99 @@ def main():
 
                      ["Vilka träningstider har ni",
                       "När tränar ni",
+                      "Vilka dagar tränar ni",
                       "När är träningarna",
                       "När slutar träningarna",
                       "Vilka tider tränar ni",
                       "Hur länge håller träningarna på",
+                      "Hur många gånger tränar ni per vecka",
+                      "Hur många träningspass har ni",
                       "Träningstiderna hittar du på "
-                      "http://shorinjikempo.net/traning/traningstider."]]
+                      "http://shorinjikempo.net/traning/traningstider."],
+
+                     ["Hur gammal måste man vara",
+                      "Vad har ni för åldersgränser",
+                      "Har ni någon åldersgräns",
+                      "För liten",
+                      "För ung",
+                      "Tillräcklingt stor",
+                      "Tillräcklingt gammal",
+                      "När är man stor nog",
+                      "När är man gammal nog",
+                      "När är man för gammal",
+                      "Kan man bli för gammal",
+                      "För att träna måste man vara minst åtta år. "
+                      "Vi har ingen övre åldersgräns, och vi har "
+                      "aktiva medlemmar som är 60+."],
+
+                     ["Måste man kunna japanska",
+                      "Behöver man lära sig japanska",
+                      "Får man lära sig japanska",
+                      "Man behöver inte kunna japanska för att träna "
+                      "Shorinji Kempo, men vissa ord och fraser kommer man "
+                      "att lära sig av sig själv."],
+
+                     ["Vem är tränaren",
+                      "Vem är instruktör",
+                      "Vad har ni för tränare",
+                      "Vilka tränare har ni",
+                      "Vad har er tränare för grad",
+                      "Vem är er sensei",
+                      "Vad heter er sensei",
+                      "Vilka är era instruktörer",
+                      "Vem är er instruktör",
+                      "Vem är Anders",
+                      "Vem är Anders-sensei",
+                      "Vår huvudinstruktör heter Anders Pettersson, "
+                      "och han har graden rokudan - svart bälte av "
+                      "sjätte graden."],
+
+                     ["När grundades klubben",
+                      "Vilket år grundades klubben",
+                      "Vem grundade klubben",
+                      "Vem startade klubben",
+                      "När startades klubben",
+                      "Vem var det som grundade klubben",
+                      "Klubben grundades av bland andra Anders Pettersson, "
+                      "1981."],
+
+                     ["Hur många medlemmar har ni",
+                      "Hur stort är medlemsantalet",
+                      "Hur många aktiva medlemmar har ni i klubben",
+                      "I nuläget har vi c:a 40 aktiva medlemmar i vår klubb."],
+
+                     ["Hur många aktiva finns det i Sverige",
+                      "Hur många medlemmar finns det totalt i Sverige",
+                      "Totalt finns det c:a 300 aktiva utövare i Sverige."],
+
+                     ["Hur många klubbar finns det i Sverige",
+                      "Hur många föreningar finns det i Sverige",
+                      "Det finns ett tiotal Shorinji Kempo-föreningar i "
+                      "Sverige."],
+
+                     ["Hur kontaktar man er",
+                      "Kan man ringa till er",
+                      "Vad är era kontaktuppgifter",
+                      "Jag vill ringa er",
+                      "Har ni någon epostadress",
+                      "Har ni någon emailadress",
+                      "Har ni någon email-adress",
+                      "Vad är er email-adress",
+                      "Vad har Anders för telefonnummer",
+                      "Vad har Christer för telefonnummer",
+                      "Kan du Anders telefonnummer",
+                      "Kan du Christers telefonnummer",
+                      "Våra kontaktuppgifter hittar du på "
+                      "http://shorinjikempo.net/kontakt."],
+
+                     ["Finns ni på Facebook",
+                      "Har ni någon Facebook-sida",
+                      "Har ni någon Facebook sida",
+                      "Vad är adressen till er Facebook"
+                      "Adressen till klubbens Facebook-sida"
+                      "Klubbens Facebook sida",
+                      "Vår Facebook-sida finns på "
+                      "http://www.facebook.com/ShorinjiKempoKarlstad."]]
 
     for data in training_data:
         intent = nlp.Intent(data[0])
@@ -114,30 +210,31 @@ def main():
         intent.response_data = data[-1]
         all_intents.append(intent)
 
-    questions = (["Hur blir jag medlem",
-                  "Vad är Shorinji Kempo för nåt",
-                  "Vem var det som skapade Shorinji Kempo",
-                  "Finns det sparkar och slag i Shorinji Kempo",
-                  "Gör det ont att träna",
-                  "Vad kostar det att bli medlem",
-                  "Kan man testa utan att behöva betala något",
-                  "Vad har ni för träningstider",
-                  "foobar"])
-
     parser = nlp.Parser(all_intents)
 
-    for question in questions:
-        print("Q:", question)
-        results = parser.parse(question)
-        if len(results) < 1:
-            print("   [Jag förstår inte den frågan]")
+    print("""Hej! Jag är en chatbot som kan svara på frågor om Shorinji Kempo,
+och om Shorinji Kempo-klubben i Karlstad.""")
+
+    while True:
+        try:
+            user_txt = input("\nDin fråga: ")
+        except (KeyboardInterrupt, EOFError):
+            print()
+            raise SystemExit
+
+        if not len(user_txt):
             continue
 
-        scored_intent = results[0]
-        score = scored_intent.score
-        intent = scored_intent.intent
+        if "shorinjo" in user_txt.lower():
+            print("OBS! Det heter Shorinji, inte Shorinjo. :-)")
+            user_txt = user_txt.replace("shorinjo", "Shorinji")
+            user_txt = user_txt.replace("Shorinjo", "Shorinji")
 
-        print("  %4d: %s" % (score, intent.response_data))
+        try:
+            result = parser.parse(user_txt)[0]
+            print("\n".join(textwrap.wrap(result.intent.response_data)))
+        except IndexError:
+            print("Tyvärr förstår jag inte din fråga.")
 
 
 if __name__ == "__main__":
