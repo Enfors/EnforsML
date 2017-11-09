@@ -1,6 +1,16 @@
 """Natural language processing.
 """
 
+from enforsml.text import ngram
+
+class NLPError(BaseException):
+    """Generic NLP error.
+    """
+    pass
+
+class IncorrectArg(NLPError):
+    pass
+
 
 class Intent(object):
     """The intent behind a textual command or sentence.
@@ -14,12 +24,26 @@ class Intent(object):
 
     def __init__(self, name):
         self.name = name
+        self.ngram_matrix = ngram.NGramMatrix(1, 3)
 
     def __repr__(self):
         return "Intent('%s')" % str(self.name)
 
     def __str__(self):
         return "'%s' intent" % self.name
+
+    def train(self, sentences):
+        """Train the intent on recognizing the sentence.
+        """
+
+        if not type(sentences) is list:
+            raise IncorrectArg("sentences is not alist")
+
+        for sentence in sentences:
+            self.ngram_matrix.add_sentence_value(sentence, 10)
+
+    def check(self, sentence):
+        return self.ngram_matrix.get_sentence_values(sentence)
 
 
 class ScoredIntent(object):
