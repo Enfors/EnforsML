@@ -3,11 +3,7 @@
 """Classes for words and sentences.
 """
 
-import doctest
-
-import text.utils
-import text.ngram
-import text.bagofwords
+from enforsml.text import utils, word, bagofwords, ngram
 
 swedish_stop_words = ["den", "en", "ett", "och",
                       "det", "att"]
@@ -21,8 +17,8 @@ def demo():
 
     min_n = 1
     max_n = 3
-    bag = text.bagofwords.BagOfWords()
-    matrix = text.ngram.NGramMatrix(min_n, max_n)
+    bag = bagofwords.BagOfWords()
+    matrix = ngram.NGramMatrix(min_n, max_n)
 
     print("min_n: %d, max_n: %d" % (min_n, max_n))
 
@@ -119,7 +115,7 @@ def demo():
         ]
 
     for sentence, score in train_data:
-        sentence = text.utils.remove_words(sentence, swedish_stop_words)
+        sentence = utils.remove_words(sentence, swedish_stop_words)
         matrix.set_sentence_value(sentence, score)
         bag.add_words(sentence.split(" "))
 
@@ -129,7 +125,7 @@ def demo():
     #         print("%-16s: %3d" % (k, v))
 
     for sentence in test_data:
-        sentence = text.utils.remove_words(sentence, swedish_stop_words)
+        sentence = utils.remove_words(sentence, swedish_stop_words)
         results.append([sentence, matrix.get_sentence_value(sentence)])
 
     for sentence, score in sorted(results, key=lambda l: l[1], reverse=True):
@@ -138,4 +134,3 @@ def demo():
 
 if __name__ == "__main__":
     demo()
-    doctest.testmod()

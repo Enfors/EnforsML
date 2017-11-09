@@ -1,60 +1,60 @@
-import text.word
+from enforsml.text import word
 
-def normalize(text):
-    """Return a normalized copy of text.
+def normalize(txt):
+    """Return a normalized copy of txt.
     """
 
-    text = normalize_whitespace(text)
-    text = unify_sentence_dividers(text)
+    txt = normalize_whitespace(txt)
+    txt = unify_sentence_dividers(txt)
 
-    return text
+    return txt
 
 
-def unify_sentence_dividers(text):
-    """Return copy of text with ? and ! replaced with .
+def unify_sentence_dividers(txt):
+    """Return copy of txt with ? and ! replaced with .
     """
 
     for ch in ["!", "?"]:
-        text = text.replace(ch, ".")
+        txt = txt.replace(ch, ".")
 
-    return text
+    return txt
 
 
-def remove_junk_chars(text):
-    """Return copy of text without unneeded chars.
+def remove_junk_chars(txt):
+    """Return copy of txt without unneeded chars.
     """
 
     for ch in [": ", "; "]:
-        text = text.replace(ch, " ")
+        txt = txt.replace(ch, " ")
 
     for ch in [".", ",", "(", ")", '"']:
-        text = text.replace(ch, "")
+        txt = txt.replace(ch, "")
 
-    return text
+    return txt
 
 
-def remove_words(text, words_to_remove):
-    """Return a copy of the text string with the specified words (not Words)
+def remove_words(txt, words_to_remove):
+    """Return a copy of the txt string with the specified words (not Words)
     removed.
     """
 
     output = ""
 
-    for word in text.split(" "):
+    for word in txt.split(" "):
         if word not in words_to_remove:
             output += word + " "
 
     return output.strip()
 
 
-def split_sentences(text):
-    """Attempt to split a text into sentences.
+def split_sentences(txt):
+    """Attempt to split a txt into sentences.
     """
 
-    text = normalize_whitespace(text)
-    text.replace("!", ".")
-    text.replace("?", ".")
-    sentences = [sentence.strip() for sentence in text.split(". ")]
+    txt = normalize_whitespace(txt)
+    txt.replace("!", ".")
+    txt.replace("?", ".")
+    sentences = [sentence.strip() for sentence in txt.split(". ")]
 
     sentences[-1] = sentences[-1].rstrip(".")
 
@@ -67,12 +67,12 @@ def split_sentence(txt):
 
     words = []
     for part in txt.split(" "):
-        words.append(text.word.Word(part))
+        words.append(word.Word(part))
 
     return words
 
 
-def normalize_and_split_sentences(text):
+def normalize_and_split_sentences(txt):
     """Return normalized sentences.
 
     >>> normalize_and_split_sentences("Foo bar. Another small sentence.")
@@ -83,14 +83,14 @@ def normalize_and_split_sentences(text):
     ['Foo bar', 'Another small sentence']
     """
 
-    text = normalize(text)
-    sentences = split_sentences(text)
+    txt = normalize(txt)
+    sentences = split_sentences(txt)
 
     return sentences
 
 
-def normalize_whitespace(text):
-    """Return a copy of text with one space between all words, with all
+def normalize_whitespace(txt):
+    """Return a copy of txt with one space between all words, with all
     newlines and tab characters removed.
 
     >>> print(normalize_whitespace("some text"))
@@ -105,10 +105,10 @@ def normalize_whitespace(text):
     some text
     """
 
-    new_text = text.replace("\n", " ")
-    new_text = new_text.replace("\r", "")
-    new_text = new_text.replace("\t", " ")
+    new_txt = txt.replace("\n", " ")
+    new_txt = new_txt.replace("\r", "")
+    new_txt = new_txt.replace("\t", " ")
 
-    words = [word.strip() for word in new_text.split(" ") if len(word) > 0]
-    new_text = " ".join(words)
-    return new_text
+    words = [word.strip() for word in new_txt.split(" ") if len(word) > 0]
+    new_txt = " ".join(words)
+    return new_txt

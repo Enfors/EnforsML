@@ -5,7 +5,7 @@
 
 import doctest
 
-from text import utils
+from enforsml.text import utils
 
 
 class NGram(object):
@@ -15,7 +15,7 @@ class NGram(object):
     is provided, a bi-gram is created. If three Words are provided, a
     3-gram is created, and so on.
 
-    >>> from text.word import *
+    >>> from enforsml.text.word import *
     >>> word1 = Word("some")
     >>> word2 = Word("words")
     >>> bi_gram = NGram([word1, word2])
