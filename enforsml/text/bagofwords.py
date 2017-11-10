@@ -11,13 +11,15 @@ class BagOfWords(object):
 
     >>> bag.add_words(["Some", "more", "words"])
     >>> len(bag)
-    6
+    7
     """
 
     def __init__(self, words=None):
         """Instanciate a bag.
         """
         self.words = {}
+        self.num_words = 0  # The number of non-unique words in the bag
+        self.num_unique_words = 0
         if words is not None:
             self.add_words(words)
 
@@ -29,6 +31,8 @@ class BagOfWords(object):
         4
         >>> bag.add_words("more words".split(" "))
         >>> len(bag)
+        6
+        >>> bag.num_unique_words
         5
         """
         for word in words:
@@ -39,6 +43,9 @@ class BagOfWords(object):
 
             num = num + 1
             self.words[word] = num
+
+        self.num_words += len(words)
+        self.num_unique_words = len(self.words)
 
     def sorted_matrix(self, reverse=False):
         """Return a matrix with words and frequencies, sorted by
@@ -66,16 +73,15 @@ class BagOfWords(object):
     def __repr__(self):
         """Return the code needed to create this bag.
         """
-        return "BagOfWords(%s)" % self.words()
+        return "BagOfWords(%s)" % self.words
 
     def __len__(self):
         """Return the number of words in the bag.
-
         >>> bag = BagOfWords("some silly words".split(" "))
         >>> len(bag)
         3
         >>> bag.add_words("more words".split(" "))
         >>> len(bag)
-        4
+        5
         """
-        return len(self.words)
+        return self.num_words
