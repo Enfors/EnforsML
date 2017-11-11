@@ -65,6 +65,35 @@ class BagOfWords(object):
                                                      reverse=reverse)]
         return matrix
 
+    def tfidf(self, sub_corpus):
+        """Calculate TF-IDF. Self is corpus.
+        """
+        tfidf_matrix = {}
+
+        for word in sub_corpus.words:
+            word = word.lower()
+            freq = self.words[word]
+            percent = freq / len(self)
+            sub_freq = sub_corpus.words[word]
+            sub_percent = sub_freq / len(sub_corpus)
+
+            tfidf_matrix[word] = sub_percent / percent
+
+#            print("\n-- word       :", word)
+#            print("   freq       :", freq)
+#            print("   percent    :", percent)
+#            print("   sub_freq   :", sub_freq)
+#            print("   sub_percent:", sub_percent)
+#            print("   result     :", sub_percent / percent)
+
+        return tfidf_matrix
+
+    def sorted_tfidf(self, sub_corpus):
+        tfidf_matrix = self.tfidf(sub_corpus)
+        return [(k, tfidf_matrix[k]) for k in
+                sorted(tfidf_matrix, key=tfidf_matrix.get,
+                       reverse=True)]
+
     def __str__(self):
         """Return a human-readable string representing the bag.
         """

@@ -104,6 +104,7 @@ def main():
                       "Var håller ni till",
                       "Var tränar ni",
                       "Var finns ni",
+                      "Var brukar ni träna",
                       "Var ligger klubbens träningslokal",
                       "Vi tränar i Kvarnbergsskolans gymnastiksal, på "
                       "Ölmegatan 10 i Karlstad."],
@@ -121,6 +122,7 @@ def main():
                      # Träningstider
                      ["Vilka träningstider har ni",
                       "När tränar ni",
+                      "Vilka tider tränar ni",
                       "Vilka dagar tränar ni",
                       "När är träningarna",
                       "När slutar träningarna",
@@ -139,8 +141,8 @@ def main():
                       "Har ni någon åldersgräns",
                       "För liten",
                       "För ung",
-                      "Tillräcklingt stor",
-                      "Tillräcklingt gammal",
+                      "Tillräckligt stor",
+                      "Tillräckligt gammal",
                       "När är man stor nog",
                       "När är man gammal nog",
                       "När är man för gammal",
@@ -205,6 +207,7 @@ def main():
 
                      # Kontaktuppgifter
                      ["Hur kontaktar man er",
+                      "Hur kan man kontakta er",
                       "Kan man ringa till er",
                       "Vad är era kontaktuppgifter",
                       "Jag vill ringa er",
@@ -230,8 +233,8 @@ def main():
                      ["Finns ni på Facebook",
                       "Har ni någon Facebook-sida",
                       "Har ni någon Facebook sida",
-                      "Vad är adressen till er Facebook"
-                      "Adressen till klubbens Facebook-sida"
+                      "Vad är adressen till er Facebook",
+                      "Adressen till klubbens Facebook-sida",
                       "Klubbens Facebook sida",
                       "Vår Facebook-sida finns på "
                       "http://www.facebook.com/ShorinjiKempoKarlstad."],
@@ -308,6 +311,39 @@ def main():
                       "http://www.shorinjikempo.net/traning/"
                       "traningsavgifter/."],
 
+                     # Bussar
+                     ["Går det bussar till träningslokalen",
+                      "Vilken buss ska man ta till dojon",
+                      "Vilken buss går till träningen",
+                      "Man kan förslagsvis åka buss nummer 3 från torget, "
+                      "men alla bussar som går till Sjukhuset stannar nära "
+                      "träningslokalen."],
+
+                     # Tävlingar
+                     ["Brukar ni tävla",
+                      "Finns det tävlingar i Shorinji Kempo",
+                      "Hur går tävlingar till i Shorinji Kempo",
+                      "Hur fungerar det med tävlingar",
+                      "Kan man tävla",
+                      "Hur tävlar man i Shorinji Kempo",
+                      "I Shorinji Kempo finns det något som kallas \"embu\". "
+                      "En embu är en slags koreograferad kamp, där det är "
+                      "förutbestämt vad varje deltagare ska göra. "
+                      "Detta är vår tävlingsform - den som visar den bästa "
+                      "embun vinner."],
+
+                     # Sparring
+                     ["Har ni sparring",
+                      "Brukar ni sparras",
+                      "Kör ni med sparring",
+                      "Tränar ni sparring",
+                      "Tränar ni med sparring",
+                      "Tränar ni randori",
+                      "Brukar ni träna randori",
+                      "Sparring inom Shorinji Kempo - och inom japanska "
+                      "kampsporter i allmänhet - kallas randori, och det är "
+                      "något vi tränar regelbundet i vuxengruppen."],
+
                      # Barngrupp
                      ["Har ni barngrupper",
                       "Har ni någon barngrupp",
@@ -318,9 +354,12 @@ def main():
                       "vuxengruppen."]]
 
     for data in training_data:
-        intent = nlp.Intent(data[0])
-        intent.train(data[:-1])
-        intent.response_data = data[-1]
+        intent_name = data[0]
+        train_sentences = data[:-1]
+        response_data = data[-1]
+
+        intent = nlp.Intent(name=intent_name, train_sentences=train_sentences,
+                            response_data=response_data)
         all_intents.append(intent)
 
     parser = nlp.Parser(all_intents)

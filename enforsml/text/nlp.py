@@ -1,7 +1,7 @@
 """Natural language processing.
 """
 
-from enforsml.text import ngram
+from enforsml.text import ngram, bagofwords
 
 
 class NLPError(BaseException):
@@ -24,10 +24,12 @@ class Intent(object):
     'start' intent
     """
 
-    def __init__(self, name, response_data=None):
+    def __init__(self, name, train_sentences=[], response_data=None):
         self.name = name
+        self.train_sentences = train_sentences
         self.response_data = response_data
         self.ngram_matrix = ngram.NGramMatrix(1, 4)
+        self.trained = False
 
     def __repr__(self):
         return "Intent('%s')" % str(self.name)
@@ -35,17 +37,21 @@ class Intent(object):
     def __str__(self):
         return "'%s' intent" % self.name
 
-    def train(self, sentences):
+    def train(self):
         """Train the intent on recognizing the sentence.
         """
 
-        if not type(sentences) is list:
+        if not type(self.train_sentences) is list:
             raise IncorrectArg("sentences is not alist")
 
-        for sentence in sentences:
+        for sentence in self.train_sentences:
             self.ngram_matrix.add_sentence_value(sentence.lower(), 10)
+        self.trained = True
 
     def check(self, sentence):
+        if not self.trained:
+            self.train()
+
         return self.ngram_matrix.get_sentence_values(sentence.lower())
 
 
@@ -77,7 +83,9 @@ class Parser(object):
     """
 
     def __init__(self, intents=[]):
+        self.corpus = bagofwords.BagOfWords()
         self.intents = intents
+        self.prepared = False
 
     def __repr__(self):
         return "Parser()"
@@ -88,9 +96,28 @@ class Parser(object):
     def __len__(self):
         return len(self.intents)
 
+    def prepare(self):
+
+        for intent in self.intents:
+            for sentence in intent.train_sentences:
+                self.corpus.add_words(sentence.lower().split(" "))
+
+        print("Prepared. Corpus contains %d words." % len(self.corpus))
+#        num_words = len(corpus_bag)
+#        for word, freq in corpus_bag.sorted_matrix():
+#            print("%4d / %.2f%%: %s" % (freq, (freq/num_words) * 100, word))
+
+        self.prepared = True
+
+    def add_intents(self, new_intents):
+        self.intents.extend(new_intents)
+
     def parse(self, txt):
         """Parse input from a user, and return a ParseResult object.
         """
+
+        if not self.prepared:
+            self.prepare()
 
         result = ParseResult()
 
@@ -100,6 +127,16 @@ class Parser(object):
                 result.add(ScoredIntent(intent, score))
 
         result.sort()
+
+        print("TF-IDF\n======")
+        sub_corpus = bagofwords.BagOfWords()
+        for sentence in result.scored_intents[0].intent.train_sentences:
+            sub_corpus.add_words(sentence.lower().split(" "))
+        tfidf_matrix = self.corpus.sorted_tfidf(sub_corpus)
+
+        for k, v in tfidf_matrix:
+            print("%f: %s" % (v, k))
+
         return result
 
 
