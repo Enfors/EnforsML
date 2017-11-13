@@ -5,7 +5,7 @@
 
 import doctest
 
-from enforsml.text import utils
+from enforsml.text import utils, bagofwords
 
 
 class NGram(object):
@@ -179,23 +179,6 @@ class NGramMatrix(object):
                 ngram_values.append(value)
                 self.matrix[n][dict_key] = ngram_values
 
-    def add_weighted_sentence_value(self, sentence, corpus, sub_corpus):
-        """Add a value to a sentence, and all its ngrams.
-        """
-
-        for n in range(self.min_n, self.max_n + 1):
-            ngrams = make_ngrams(utils.split_sentence(sentence), n)
-
-            for ngram in ngrams:
-                dict_key = str(ngram)
-
-                try:
-                    ngram_values = self.matrix[n][dict_key]
-                except KeyError:
-                    ngram_values = []
-
-                ngram_values.append(value)
-                self.matrix[n][dict_key] = ngram_values
 
     def get_sentence_avg_value(self, sentence):
         """Get the average value for a sentence.
@@ -239,6 +222,41 @@ class NGramMatrix(object):
 
         return all_values
 
+
+class WeightedNGramDict(object):
+    """A dictionary where each NGram hold only one value - a weight.
+    """
+
+    def __init__(self, corpus, train_sentences):
+        self.weights = {}
+        sub_corpus = bagofwords.BagOfWords()
+        
+        for sentence in train_sentences:
+            sub_corpus.add_words(sentence.lower().split(" "))
+
+        self.weights = corpus.tfidf(sub_corpus)
+
+    def __str__(self):
+        output = "WeightedNGramDict\n================\n"
+
+        for word in self.weights.keys():
+            output += "%s: %s\n" % (word, self.weights[word])
+
+        return output.strip()
+        
+    def get_sentence_weight(self, sentence):
+        """Return the sum of the weights for all the words in the sentence.
+        """
+
+        total_weight = 0
+
+        for word in sentence.split(" "):
+            try:
+                total_weight += self.weights[word]
+            except KeyError:
+                pass
+
+        return total_weight
 
 def make_ngrams(words, n):
     """Return n-grams from a list of Words.

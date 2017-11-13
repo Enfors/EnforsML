@@ -28,7 +28,9 @@ class Intent(object):
         self.name = name
         self.train_sentences = train_sentences
         self.response_data = response_data
-        self.ngram_matrix = ngram.NGramMatrix(1, 4)
+        self.ngram_matrix = ngram.NGramMatrix(2, 4)
+        self.weights = None
+        self.corpus = None
         self.trained = False
 
     def __repr__(self):
@@ -42,17 +44,24 @@ class Intent(object):
         """
 
         if not type(self.train_sentences) is list:
-            raise IncorrectArg("sentences is not alist")
+            raise IncorrectArg("sentences is not a list")
+
+        self.weights = ngram.WeightedNGramDict(self.corpus,
+                                               self.train_sentences)
 
         for sentence in self.train_sentences:
-            self.ngram_matrix.add_sentence_value(sentence.lower(), 10)
+            self.ngram_matrix.add_sentence_value(sentence.lower(), 2)
+
         self.trained = True
 
     def check(self, sentence):
         if not self.trained:
             self.train()
 
-        return self.ngram_matrix.get_sentence_values(sentence.lower())
+        weights = self.weights.get_sentence_weight(sentence.lower())
+        ngram_values = sum(self.ngram_matrix.get_sentence_values(sentence.lower()))
+
+        return weights, ngram_values
 
 
 class ScoredIntent(object):
@@ -64,9 +73,11 @@ class ScoredIntent(object):
     ScoredIntent(Intent('default'), 10)
     """
 
-    def __init__(self, intent, score):
+    def __init__(self, intent, score, weights, ngram_values):
         self.intent = intent
         self.score = score
+        self.weights = weights
+        self.ngram_values = ngram_values
 
     def __repr__(self):
         return "ScoredIntent(%s, %d)" % (repr(self.intent), self.score)
@@ -98,14 +109,17 @@ class Parser(object):
 
     def prepare(self):
 
+        # Loop through all the intents to build the corpus.
         for intent in self.intents:
             for sentence in intent.train_sentences:
                 self.corpus.add_words(sentence.lower().split(" "))
 
+        # Loop through all intents again, and give them a link to the
+        # newly-prepared corpus.
+        for intent in self.intents:
+            intent.corpus = self.corpus
+
         print("Prepared. Corpus contains %d words." % len(self.corpus))
-#        num_words = len(corpus_bag)
-#        for word, freq in corpus_bag.sorted_matrix():
-#            print("%4d / %.2f%%: %s" % (freq, (freq/num_words) * 100, word))
 
         self.prepared = True
 
@@ -122,20 +136,21 @@ class Parser(object):
         result = ParseResult()
 
         for intent in self.intents:
-            score = sum(intent.check(txt))
+            weights, ngram_values = intent.check(txt)
+            score = weights + ngram_values
             if score > 0:
-                result.add(ScoredIntent(intent, score))
+                result.add(ScoredIntent(intent, score, weights, ngram_values))
 
         result.sort()
 
-        print("TF-IDF\n======")
+        # print("TF-IDF\n======")
         sub_corpus = bagofwords.BagOfWords()
         for sentence in result.scored_intents[0].intent.train_sentences:
             sub_corpus.add_words(sentence.lower().split(" "))
         tfidf_matrix = self.corpus.sorted_tfidf(sub_corpus)
 
-        for k, v in tfidf_matrix:
-            print("%f: %s" % (v, k))
+        # for k, v in tfidf_matrix:
+        #    print("%f: %s" % (v, k))
 
         return result
 

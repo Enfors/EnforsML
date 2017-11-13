@@ -27,8 +27,17 @@ def main():
                       "Hur blir man medlem i klubben",
                       "Hur går man med i Shorinji Kempo",
                       "Hur går man med i klubben",
+                      "Hur anmäler man sig",
+                      "Var kan jag anmäla mig",
+                      "Måste man anmäla sig",
                       "Information om hur man blir medlem hittar du på "
                       "http://shorinjikempo.net/traning/borja-trana."],
+
+                     # Är det roligt
+                     ["Är det roligt att träna Shorinji Kempo",
+                      "Är Shorinji Kempo roligt",
+                      "Är det kul att träna",
+                      "Det är jätteroligt att träna Shorinji Kempo!"],
 
                      # Vem grundade Shorinji Kempo
                      ["Vem grundade Shorinji Kempo",
@@ -182,6 +191,7 @@ def main():
                       "Vilket år grundades klubben",
                       "Vem grundade klubben",
                       "Vem startade klubben",
+                      "Vem var det som startade klubben",
                       "När startades klubben",
                       "Vem var det som grundade klubben",
                       "Klubben grundades av bland andra Anders Pettersson, "
@@ -296,7 +306,7 @@ def main():
                       "I Shorinji Kempo så tränar alla tillsammans, oavsett "
                       "erfarenhetsnivå. Det ingår i konceptet att de erfarna "
                       "hjälper till att instruera nybörjarna, så alla tränar "
-                      "på samma tider, oavsett nivå."],
+                      "på samma tider"],
 
                      # Familjerabatt
                      ["Har ni familjerabatt",
@@ -390,7 +400,9 @@ och om Shorinji Kempo-klubben i Karlstad.""")
 
             try:
                 result = parser.parse(sentence)[0]
-                print("[Score: %d]" % result.score)
+                print("[Score:        %3d]" % result.score)
+                print("[weights:      %3d]" % result.weights)
+                print("[ngram_values: %3d]" % result.ngram_values)
                 print("\n".join(textwrap.wrap(result.intent.response_data)))
             except IndexError:
                 print("Tyvärr förstår jag inte din fråga.")
