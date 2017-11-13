@@ -257,6 +257,18 @@ def main():
                       "Om man ligger i, kan man ta svart bälte efter ungefär "
                       "fem års träning."],
 
+                     # Behöver man ta med sig något till träningen
+                     ["Behöver man ta med sig något till träningen",
+                      "Vad behöver man ta med sig till träning",
+                      "Är det något man ska ta med sig",
+                      "Ska jag ta med mig något till träningen",
+                      "Behöver man ha något med sig när man ska träna",
+                      "Det enda man behöver är lämpliga träningskläder. Man "
+                      "kan köpa en traditionell träningsdräkt - en dogi - via "
+                      "klubben, men innan dess kan man ha vanliga träningskläder "
+                      "på sig när man tränar. Det kan dock vara en bra ide att "
+                      "ha en vattenflaska med sig."],
+                     
                      # Behöver man skor
                      ["Behöver man ha skor",
                       "Har man skor på sig",
@@ -329,11 +341,27 @@ def main():
                       "men alla bussar som går till Sjukhuset stannar nära "
                       "träningslokalen."],
 
+                     # Parkering
+                     ["Finns det parkeringsplatser vid träningslokalen",
+                      "Går det att parkera",
+                      "Var kan man pakera",
+                      "Är det ont om parkeringsplatser",
+                      "Är det ont om pakering",
+                      "Hur många parkeringsplatser finns det",
+                      "Är det svårt att hitta parkering",
+                      "Brukar det finnas lediga parkeringsplatser",
+                      "I motsatt ände av skolgården från träningslokalen sett, "
+                      "så finns det parkeringsplatser som är tillgängliga för "
+                      "allmänheten efter kl 17. Det brukar inte vara några "
+                      "problem att hitta lediga platser."],
+
                      # Tävlingar
                      ["Brukar ni tävla",
                       "Finns det tävlingar i Shorinji Kempo",
                       "Hur går tävlingar till i Shorinji Kempo",
                       "Hur fungerar det med tävlingar",
+                      "Hur funkar tävlingar",
+                      "Hur fungerar tävlandet",
                       "Kan man tävla",
                       "Hur tävlar man i Shorinji Kempo",
                       "I Shorinji Kempo finns det något som kallas \"embu\". "
@@ -341,6 +369,14 @@ def main():
                       "förutbestämt vad varje deltagare ska göra. "
                       "Detta är vår tävlingsform - den som visar den bästa "
                       "embun vinner."],
+
+                     # Hur ofta tävlar vi
+                     ["Hur ofta är det tävling",
+                      "Hur ofta brukar ni tävla",
+                      "När är det tävlingar",
+                      "Är det många tävlingar",
+                      "Vi brukar delta i SM varje år, och vi har även lösa "
+                      "planer på att arrangera egna klubbtävlingar."],
 
                      # Sparring
                      ["Har ni sparring",
