@@ -68,7 +68,7 @@ class ScoredIntent(object):
     """A container for an Intent and a (confidence) score.
 
     >>> intent = Intent("default")
-    >>> scored_intent = ScoredIntent(intent, 10)
+    >>> scored_intent = ScoredIntent(intent, 10, 5, 5)
     >>> scored_intent
     ScoredIntent(Intent('default'), 10)
     """
@@ -162,9 +162,9 @@ class ParseResult(object):
     >>> intent1 = Intent("Intent 1")
     >>> intent2 = Intent("Intent 2")
     >>> intent3 = Intent("Intent 3")
-    >>> scored_intent1 = ScoredIntent(intent1, 20)
-    >>> scored_intent2 = ScoredIntent(intent2, 10)
-    >>> scored_intent3 = ScoredIntent(intent3, 30)
+    >>> scored_intent1 = ScoredIntent(intent1, 20, 10, 10)
+    >>> scored_intent2 = ScoredIntent(intent2, 10, 5, 5)
+    >>> scored_intent3 = ScoredIntent(intent3, 30, 10, 20)
     >>> result = ParseResult([scored_intent1,
     ...    scored_intent2,
     ...    scored_intent3])
