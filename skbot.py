@@ -4,12 +4,15 @@
 Attempts to answer questions about Shorinji Kempo.
 """
 
+import click
 import textwrap
 
 from enforsml.text import nlp, utils
 
 
-def main():
+@click.command()
+@click.option("--web/--no-web", default=False, help="Run web interface.")
+def bot(web):
     """Main function of the script.
     """
 
@@ -30,6 +33,7 @@ def main():
                       "Hur anmäler man sig",
                       "Var kan jag anmäla mig",
                       "Måste man anmäla sig",
+                      "När tar ni in nya medlemmar",
                       "Information om hur man blir medlem hittar du på "
                       "http://shorinjikempo.net/traning/borja-trana."],
 
@@ -141,6 +145,8 @@ def main():
                       "Hur många träningspass har ni",
                       "Hur ofta tränar ni",
                       "Hur ofta har ni träningar",
+                      "Hur ofta är det träning",
+                      "Hur ofta måste man träna",
                       "Träningstiderna hittar du på "
                       "http://shorinjikempo.net/traning/traningstider."],
 
@@ -194,6 +200,7 @@ def main():
                       "Vem var det som startade klubben",
                       "När startades klubben",
                       "Vem var det som grundade klubben",
+                      "Hur länge har klubben funnits",
                       "Klubben grundades av bland andra Anders Pettersson, "
                       "1981."],
 
@@ -261,6 +268,7 @@ def main():
                      ["Behöver man ta med sig något till träningen",
                       "Vad behöver man ta med sig till träning",
                       "Är det något man ska ta med sig",
+                      "Behöver man egen utrustning",
                       "Ska jag ta med mig något till träningen",
                       "Behöver man ha något med sig när man ska träna",
                       "Det enda man behöver är lämpliga träningskläder. Man "
@@ -318,7 +326,8 @@ def main():
                       "I Shorinji Kempo så tränar alla tillsammans, oavsett "
                       "erfarenhetsnivå. Det ingår i konceptet att de erfarna "
                       "hjälper till att instruera nybörjarna, så alla tränar "
-                      "på samma tider"],
+                      "på samma tider. Därför kan man börja träna även mitt i "
+                      "en termin."],
 
                      # Familjerabatt
                      ["Har ni familjerabatt",
@@ -373,6 +382,8 @@ def main():
                      # Hur ofta tävlar vi
                      ["Hur ofta är det tävling",
                       "Hur ofta brukar ni tävla",
+                      "Hur ofta tävlar ni",
+                      "Hur ofta är det tävlingar",
                       "När är det tävlingar",
                       "Är det många tävlingar",
                       "Vi brukar delta i SM varje år, och vi har även lösa "
@@ -395,6 +406,9 @@ def main():
                       "Har ni någon barngrupp",
                       "Har ni en juniorgrupp",
                       "Finns det någon barngrupp",
+                      "Har ni någon vuxengrupp",
+                      "Är det för barn eller vuxna",
+                      "Kan vuxna vara medlemmar",
                       "Är ni uppdelade i barngrupp och vuxengrupp",
                       "Barn under 13 år tränar för sig, och övriga tränar i "
                       "vuxengruppen."]]
@@ -413,6 +427,10 @@ def main():
     print("""Hej! Jag är en chatbot som kan svara på frågor om Shorinji Kempo,
 och om Shorinji Kempo-klubben i Karlstad.""")
 
+    if web:
+        run_web(parser)
+        raise SystemExit()
+    
     while True:
         try:
             user_txt = input("\nDin fråga: ")
@@ -435,14 +453,29 @@ och om Shorinji Kempo-klubben i Karlstad.""")
             sentence = utils.remove_junk_chars(sentence)
 
             try:
-                result = parser.parse(sentence)[0]
-                print("[Score:        %3d]" % result.score)
-                print("[weights:      %3d]" % result.weights)
-                print("[ngram_values: %3d]" % result.ngram_values)
-                print("\n".join(textwrap.wrap(result.intent.response_data)))
+                results = parser.parse(sentence)
+                result = results[0]
+                print("SVAR:", " " * 48, "[Score:        %3d]" % result.score)
+                print(" ", "\n  ".join(textwrap.wrap(result.intent.response_data)))
+                print(" " * 54, "[weights:      %3d]" % result.weights)
+                print(" " * 54, "[ngram_values: %3d]" % result.ngram_values)
+                print()
+                print("ALTERNATIVA FRÅGOR:")
+                
+                index = 1
+                while index < len(results) and index < 4:
+                    print("  %-52s [Score:        %3d]" % (results[index].intent.\
+                                                           train_sentences[0],
+                                                           results[index].score))
+                    index += 1
+                print("=" * 74)
+                
             except IndexError:
                 print("Tyvärr förstår jag inte din fråga.")
 
 
+def run_web(parser):
+    print("Imma run on the web!")
+
 if __name__ == "__main__":
-    main()
+    bot()

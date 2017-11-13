@@ -213,10 +213,10 @@ class NGramMatrix(object):
 
                         avg = value_sum / len(values)
 
-                    # Multiply the average with n, to weigh it.
+                    # Multiply the average, to weigh it.
                     # 3-gram matches are three times more significant than
                     # unigram matches.
-                    all_values.append(avg * n)
+                    all_values.append(avg * pow(1.5, n - 1))
                 except KeyError:
                     pass  # This ngram didn't exist
 

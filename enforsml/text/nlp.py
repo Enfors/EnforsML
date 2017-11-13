@@ -28,7 +28,7 @@ class Intent(object):
         self.name = name
         self.train_sentences = train_sentences
         self.response_data = response_data
-        self.ngram_matrix = ngram.NGramMatrix(2, 4)
+        self.ngram_matrix = ngram.NGramMatrix(2, 6)
         self.weights = None
         self.corpus = None
         self.trained = False
