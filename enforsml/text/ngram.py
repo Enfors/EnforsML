@@ -179,6 +179,24 @@ class NGramMatrix(object):
                 ngram_values.append(value)
                 self.matrix[n][dict_key] = ngram_values
 
+    def add_weighted_sentence_value(self, sentence, corpus, sub_corpus):
+        """Add a value to a sentence, and all its ngrams.
+        """
+
+        for n in range(self.min_n, self.max_n + 1):
+            ngrams = make_ngrams(utils.split_sentence(sentence), n)
+
+            for ngram in ngrams:
+                dict_key = str(ngram)
+
+                try:
+                    ngram_values = self.matrix[n][dict_key]
+                except KeyError:
+                    ngram_values = []
+
+                ngram_values.append(value)
+                self.matrix[n][dict_key] = ngram_values
+
     def get_sentence_avg_value(self, sentence):
         """Get the average value for a sentence.
         """
