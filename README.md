@@ -1,6 +1,8 @@
 # EnforsML - Enfors Machine Learning library
 
-Project state: Planning
+Project state: early planning
+
+In its current state, this library only supports chatbot backends.
 
 # text - text-related classes
 
@@ -37,4 +39,42 @@ the like.
    score. The Parser will then return a list of Intents with a
    confidence score higher than zero, sorted by the confidence score
    (descending - highest first).
+
+### Context
+
+An Intent can do (among other things) these things:
+
+1. It can *enable* a context
+
+2. It can *disable* a context
+
+3. It can *require* a context to be active for the Intent itself to be
+   triggered
+   
+#### The context interface - how to create them, etc
+
+A web interface is planned, but for now, we create contexts directly
+in the code as part of an intent's training data. Lines in the
+training data that begin with an at sign are context directives. They
+come in three forms:
+
+    @enable FooContext
+	
+This (creates and ) enables the context named FooContext.
+	
+	@require FooContext
+	
+An Intent that has this directive can only be triggered when the
+FooContext context is active.
+
+    @disable FooContext
+	
+
+#### The context implementation - how they work internally
+   
+When an Intent is trained, it starts by looking for lines in the
+training data that begin with an at sign. If the at sign is followed
+by "enable", "disable" or "require", then the Intent data structure is
+updated accordingly, and the line is removed from the training data
+before it is passed on to the actual training.
 
