@@ -60,7 +60,7 @@ come in three forms:
 
     @enable FooContext
 	
-This (creates and ) enables the context named FooContext.
+This (creates and) enables the context named FooContext.
 	
 	@require FooContext
 	
@@ -78,3 +78,33 @@ by "enable", "disable" or "require", then the Intent data structure is
 updated accordingly, and the line is removed from the training data
 before it is passed on to the actual training.
 
+The parser also has a list of all contexts that have been created, so
+that it can check which of them are enabled at any time.
+
+
+### EMLB format
+
+The ``EMLB`` (Enfors Machine Learning Bot) format is a format for
+storing bots in a text file.
+
+    Hello, I'm ExampleBot. How can I help you?
+	
+	What can you do?
+	I can't really do much, I'm just an example.
+	
+	Who wrote you?
+	Who made you?
+	Who programmed you?
+	Who developed you?
+	Who created you?
+	I was created by Christer Enfors.
+	
+	I want to sign up for the mailing list
+	I want to subscribe to the maiiling list
+	I want to be on the mailinglist
+	All right, what's your email address?
+	@enable ReceiveEmailAddress
+	
+	@require ReceiveEmailAddress
+	@storeinput email
+	Thank you, you're now subscribed.
