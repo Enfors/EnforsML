@@ -1,7 +1,7 @@
 """Natural language processing.
 """
 
-from enforsml.text import ngram, bagofwords
+from enforsml.text import bagofwords, ngram, utils
 
 
 class NLPError(BaseException):
@@ -12,6 +12,15 @@ class NLPError(BaseException):
 
 class IncorrectArg(NLPError):
     pass
+
+
+class Context(object):
+    """A context that can be triggered by an Intent.
+    """
+
+    def __init__(self, name, enabled=False):
+        self.name = name
+        self.enabled = enabled
 
 
 class Intent(object):
@@ -39,7 +48,19 @@ class Intent(object):
     def __str__(self):
         return "'%s' intent" % self.name
 
+    def add_train_txt(self, txt):
+        """Get sentences from txt and add them to the training sentences.
+        """
+
+        txt = utils.unify_sentence_dividers(txt)
+        sentences = utils.normalize_and_split_sentences(txt)
+
+        for sentence in sentences:
+            sentence = utils.remove_junk_chars(sentence)
+            self.train_sentences.append(sentence)
+    
     def train(self):
+
         """Train the intent on recognizing the sentence.
         """
 
