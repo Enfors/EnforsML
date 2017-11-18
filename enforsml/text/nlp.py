@@ -140,7 +140,7 @@ class Parser(object):
         for intent in self.intents:
             intent.corpus = self.corpus
 
-        print("Prepared. Corpus contains %d words." % len(self.corpus))
+        # print("Prepared. Corpus contains %d words." % len(self.corpus))
 
         self.prepared = True
 
@@ -163,15 +163,6 @@ class Parser(object):
                 result.add(ScoredIntent(intent, score, weights, ngram_values))
 
         result.sort()
-
-        # print("TF-IDF\n======")
-        sub_corpus = bagofwords.BagOfWords()
-        for sentence in result.scored_intents[0].intent.train_sentences:
-            sub_corpus.add_words(sentence.lower().split(" "))
-        tfidf_matrix = self.corpus.sorted_tfidf(sub_corpus)
-
-        # for k, v in tfidf_matrix:
-        #    print("%f: %s" % (v, k))
 
         return result
 
