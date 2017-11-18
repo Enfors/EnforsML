@@ -1,0 +1,39 @@
+# This is an example bot file.
+
+Intent Start
+User:
+- start
+- restart
+- start over
+- reboot
+Bot:
+- Hello, I'm ExampleBot. How can I help you?
+
+Intent WhatCanYouDo
+User:
+- What can you do
+- What are you good for
+- What are your capabilities
+Bot:
+- I can't really do much, I'm just an example.
+
+Intent WhoWroteYou
+User:
+- Who wrote you?
+- Who made you?
+- Who programmed you?
+- Who developed you?
+- Who created you?
+Bot:
+- I was created by Christer Enfors.
+
+Intent Subscribe
+User:
+- I want to sign up for the mailing list
+- I want to subscribe to the maiiling list
+- I want to be on the mailinglist
+Bot:
+- All right, what's your email address?
+@storeinput email
+Bot:
+- Thank you, you're now subscribed.
