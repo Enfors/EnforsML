@@ -1,0 +1,86 @@
+# This is the demo for the Swedish CGI leaders' conference at 2017-12-01.
+
+Intent Start
+User:
+- start
+- restart
+- starta om
+- börja om
+- börja på nytt
+- reboot
+- hej
+- vem är du
+- vad heter du
+- hallå
+Bot:
+- Hej! :-) Jag är en chatbot som heter Next Demo-bot. Vad kan jag hjälpa dig med?
+
+Intent Bye
+User:
+- hej då
+Bot:
+- Hej då! Ha det så bra!
+
+Intent WhatIsAChatbot
+User:
+- vad är en chatbot
+- vad är en chat bot
+- vad är chattbot för något
+- vad är chattbottar
+- vad är chattbotar
+Bot:
+- En chatbot är ett program som gör sitt bästa för att chatta som en människa.
+
+Intent SwedishPlease
+User:
+- hello
+- hi
+- hey
+- swedish
+- english
+Bot:
+- Hello there! This bot only speaks Swedish, so please try something in Swedish instead.
+
+Intent Okay
+User:
+- okej
+- okay
+- ok
+Bot:
+- Okej! :-) Vad kan jag stå till tjänst med?
+
+Intent DoYouKnow
+User:
+- vet du
+Bot:
+- Det vet jag tyvärr inte.
+
+Intent WhatCanYouDo
+User:
+- vad kan du göra
+- vad är du till för
+- vad ska man ha dig till
+- vad är ditt syfte
+- vad är poängen med dig
+Bot:
+- Mitt syfte är att visa vad man kan göra med chatbots.
+
+Intent WhoMadeYou
+User:
+- vem gjorde dig
+- vem gjorde den här botten
+- vem har gjort dig
+- vem skrev den här botten
+- vem var det som skapade dig
+Bot:
+- Jag skapades av Christer Enfors på CGI:s Karlstadskontor.
+
+Intent HowToProfit
+User:
+- hur kan vi tjäna pengar
+- hur kan vi göra vinst
+- hur tjänar man pengar
+- hur säljer man
+Bot:
+- En chatbot kan t.ex. enkelt svara på 50% av de frågor som ställs till en kundtjänst. En mer avancerad bot kan även ta emot beställningar av mobilabonnemang, eller liknande.
+
