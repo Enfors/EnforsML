@@ -12,8 +12,15 @@ User:
 - vem är du
 - vad heter du
 - hallå
+- tjena
 Bot:
-- Hej! :-) Jag är en chatbot som heter Next Demo-bot. Vad kan jag hjälpa dig med?
+- Hej! :-) Jag är en chatbot som heter Next Demo-bot. Jag försöker svara på frågor om chatbottar.
+
+Intent Test
+User:
+- test
+Bot:
+- Botten är igång.
 
 Intent WhatIsAChatbot
 User:
