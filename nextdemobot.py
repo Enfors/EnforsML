@@ -4,6 +4,10 @@
 """
 
 import textwrap
+import time
+
+import telepot
+from telepot.loop import MessageLoop
 
 from enforsml.text import emlb, nlp, utils
 
@@ -21,9 +25,32 @@ def debug_msg(msg):
         print(msg)
 
 
-user_txt = "start"
+def read_private(file_name):
+    with open(file_name, "r") as f:
+        contents = f.readline()
+    return contents.strip()
 
-while True:
+
+
+def handle_msg(msg):
+    global bot
+
+    content_type, chat_type, chat_id = telepot.glance(msg)
+
+    if content_type != "text":
+        return False
+
+    user_txt = msg["text"].strip()
+    user_id = msg["chat"]["id"]
+
+    if len(user_txt) < 1:
+        return False
+
+    if user_txt[0] == "/":
+        user_txt = user_txt[1:]
+
+    print("Message from user:", user_txt)
+
     user_txt = utils.unify_sentence_dividers(user_txt)
     sentences = utils.normalize_and_split_sentences(user_txt)
 
@@ -40,16 +67,22 @@ while True:
             result = results[0]
             debug_msg("\nANSWER:")
             response = result.intent.response_data
-            print("\n".join(textwrap.wrap(response)))
+            bot.sendMessage(chat_id, response)
         except IndexError:
-            print("Jag förstår tyvärr inte. Kan du omformulera dig?")
+            bot.sendMessage(chat_id, "Jag förstår tyvärr inte. "
+                            "Kan du omformulera dig?")
 
     user_txt = ""
-    while len(user_txt) == 0:
-        try:
-            user_txt = input("> ")
-        except (KeyboardInterrupt, EOFError):
-            print()
-            raise SystemExit
 
 
+bot = telepot.Bot(read_private("private/telegram_token"))
+print(bot.getMe())
+
+MessageLoop(bot, handle_msg).run_as_thread()
+
+while True:
+    try:
+        time.sleep(10)
+    except (KeyboardInterrupt):
+        print()
+        raise SystemExit

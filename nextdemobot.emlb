@@ -15,12 +15,6 @@ User:
 Bot:
 - Hej! :-) Jag är en chatbot som heter Next Demo-bot. Vad kan jag hjälpa dig med?
 
-Intent Bye
-User:
-- hej då
-Bot:
-- Hej då! Ha det så bra!
-
 Intent WhatIsAChatbot
 User:
 - vad är en chatbot
@@ -64,6 +58,11 @@ User:
 - vad är poängen med dig
 Bot:
 - Mitt syfte är att visa vad man kan göra med chatbots.
+
+Intent WhatCanYouDoWithChatbots
+User:
+- vad kan man göra med chatbots
+- vad kan man göra med chatbottar
 
 Intent WhoMadeYou
 User:
