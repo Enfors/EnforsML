@@ -1,45 +1,27 @@
 #!/usr/bin/env python3
 
-import errno
-import os
-
-import cv2
-
 """
 Functions for dividing images into smaller ones.
 
+The primary function you'd want to use from this module is
+divide_image_and_save().
+
 """
+
+import errno
+import os
+
+from PIL import Image, ImageDraw
 
 SAMPLE_IMAGE_PATH="images/2017 DIEVAR  B14593 381X119 3019T 500X.tif"
 
 def demo():
-
-    num_x = 7
-    num_y = 5
+    """
+    This function demonstrates how this module can be used.
+    """
     
-    img = cv2.imread(SAMPLE_IMAGE_PATH)
-
-    img = cv2.resize(img, None, fx=0.75, fy=0.75,
-                     interpolation=cv2.INTER_AREA)
-
-    height, width, channels = img.shape
-    
-    cv2.imshow("Input image", img)
-    cv2.waitKey()
-
-    grid = calc_subimage_grid(width, height, num_x=num_x, num_y=num_y, margin=35)
-
-    for square in grid:
-        (top_x, top_y, bot_x, bot_y) = square
-        cv2.rectangle(img, (top_x, top_y), (bot_x, bot_y),
-                      (0, 255, 0), 1)
-
-    cv2.imshow("With grid", img)
-    cv2.waitKey()
-
-    (top_x, top_y, bot_x, bot_y) = grid[0]
-    
-    cropped = img[top_y:bot_y, top_x:bot_x]
+    num_x = 10
+    num_y = 8
 
     divide_image_and_save(SAMPLE_IMAGE_PATH, num_x, num_y, margin=35)
 
@@ -61,19 +43,27 @@ def divide_image(image_path, num_x, num_y, margin=0):
     """
     subimages = list()
 
-    if not os.path.isfile(image_path):
-        raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), image_path)
+    try:
+        img = Image.open(image_path)
+    except FileNotFoundError:
+        print("File not found: \"%s\"" % image_path)
+        raise
+
+    x_size, y_size = img.size
+
+    print("The original image is %d by %d pixels." % (x_size, y_size))
     
-    img = cv2.imread(image_path)
+    grid = calc_subimage_grid(x_size, y_size, num_x, num_y, margin)
 
-    height, width, channels = img.shape
-
-    grid = calc_subimage_grid(width, height, num_x, num_y, margin)
+    print("Divided into a grid of %d columns and %d rows, "
+          "each subimage is %d by %d pixels." % (num_x, num_y,
+                                                 grid[0][2] - grid[0][0],
+                                                 grid[0][3] - grid[0][1]))
 
     for square in grid:
-        (top_x, top_y, bot_x, bot_y) = square
+        (bot_x, bot_y, top_x, top_y) = square
 
-        subimage = img[top_y:bot_y, top_x:bot_x]
+        subimage = img.crop((bot_x, bot_y, top_x, top_y))
         subimages.append(subimage)
 
     return subimages
@@ -102,9 +92,13 @@ def divide_image_and_save(image_path, num_x, num_y, margin=0):
     dirname = os.path.dirname(image_path)
 
     for subimage in subimages:
-        cv2.imwrite(os.path.join(dirname, "subimage-%04d.png" % (subimage_num + 1)), subimage)
+        subimage.save(os.path.join(dirname, "subimage-%04d.png") %
+                      (subimage_num + 1), "PNG")
         subimage_num += 1
 
+    print("%d subimages saved into the folder %s." % (subimage_num,
+                                                      dirname))
+        
     return subimage_num
 
 
@@ -124,18 +118,19 @@ def calc_subimage_grid(image_x_size, image_y_size, num_x, num_y, margin=0):
         ((top_x, top_y, bot_x, bot_y), ...)
 
     >>> calc_subimage_grid(10, 10, 2, 2)
-    [[0, 0, 4, 4], [0, 5, 4, 9], [5, 0, 9, 4], [5, 5, 9, 9]]
+    [[0, 0, 4, 4], [5, 0, 9, 4], [0, 5, 4, 9], [5, 5, 9, 9]]
+    >>> calc_subimage_grid(10, 5, 2, 1)
+    [[0, 0, 4, 4], [5, 0, 9, 4]]
     """
-    
-    
+
     subimage_params = list()
     
     (sub_x_size, sub_y_size, x_offset, y_offset) = \
         calc_subimage_size(image_x_size, image_y_size,
                            num_x, num_y, margin)
 
-    for x in range(0, num_x):
-        for y in range(0, num_y):
+    for y in range(0, num_y):
+        for x in range(0, num_x):
             subimage_param = [(x * sub_x_size) + x_offset,
                               (y * sub_y_size) + y_offset,
                               ((x + 1) * sub_x_size) + x_offset - 1,
